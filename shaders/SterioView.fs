@@ -9,7 +9,7 @@ Example User Data:
     "shaderUrl": "https://theepicsnail.github.io/hifi/shaders/SterioView.fs",
     "version": 2,
     "channels": [
-        "https://cdn.discordapp.com/attachments/413247180887949322/518642617211420678/20181201231835_1_vr.jpg",
+        "https://cdn.discordapp.com/attachments/413247180887949322/518642617211420678/20181201231835_1_vr.jpg"
     ],
     "grabbableKey": {
       "grabbable": false
@@ -37,7 +37,7 @@ float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float s
 
     uv= _position.xy;
 
-    uv.x = (uv.x-0.5) /2;
+    uv.x = (0.5-uv.x) /2;
     uv.x += cam_getStereoSide() *.5;
 
     uv.y *= -1;
