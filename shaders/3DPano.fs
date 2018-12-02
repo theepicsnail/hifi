@@ -34,7 +34,7 @@ Recommended:
 Example User Data:
 {
   "ProceduralEntity": {
-    "shaderUrl": "http://home.snail.rocks:8000/shaders/3dPano.fs",
+    "shaderUrl": "https://theepicsnail.github.io/hifi/shaders/3DPano.fs",
     "version": 2,
     "channels": [
         "http://blog.dsky.co/wp-content/uploads/2015/09/06-VikingVillage_stereo_thumb.jpg",
