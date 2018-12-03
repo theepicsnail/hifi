@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "pretty": true,
+        "target": "es5",
+        "lib": [
+            "es5"
+        ],
+        "outDir": "scripting/build",
+        "rootDir": "scripting"
+    },
+    "include": [
+        "scripting",
+        "typings"
+    ]
+  }
