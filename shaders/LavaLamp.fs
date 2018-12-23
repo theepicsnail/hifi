@@ -96,7 +96,7 @@ vec3 estimateNormal(vec3 p) {
 }
 float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float shininess) {
     specular = vec3(0);
-    shininess = 0.5;
+    shininess = 127;
     
     vec3 surface_pos = _position.xyz*iWorldScale;
     vec3 eye_pos = inverse(iWorldOrientation)*(getEyeWorldPos()-iWorldPosition);
@@ -107,14 +107,6 @@ float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float s
     // ObjectOrientation
     // Origin is bottom center
 
-    // handle the caps
-    float bottom_cap_height = .1; // meters
-    float top_cap_height = .05; // meters
-    float height = surface_pos.y;
-    if(height < bottom_cap_height || height > iWorldScale.y-top_cap_height) {
-        diffuse = cap_color.xyz;
-        return cap_color.w;
-    }
     
     vec3 ray_dir = normalize(surface_pos - eye_pos);
     int max_steps = 20;
@@ -135,16 +127,15 @@ float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float s
         total_distance += d;
     }
     if(step == max_steps) {
-        diffuse = vec3(
-            0,0,.5*dot(ray_dir.xz, surface_pos.xz)*dot(ray_dir.xz, surface_pos.xz)
-        );
+        //diffuse = vec3(
+        //    0,0,.5*dot(ray_dir.xz, surface_pos.xz)*dot(ray_dir.xz, surface_pos.xz)
+        //);
+
         discard;
     } else {
         float v =-dot(ray_dir, estimateNormal(pos));
-        //diffuse = vec3(1,1-cos(v+0.5),0);
         vec3 t = vec3(.618, 1, 1.618) * iGlobalTime;
         diffuse = mix(cos(t), sin(t), v)*.5+.5;
-        //return v;
     }
     return 1;
 }

@@ -6,7 +6,7 @@ Recommended:
 Example User Data:
 {
   "ProceduralEntity": {
-    "shaderUrl": "https://theepicsnail.github.io/hifi/shaders/Spheres.fs",
+    "shaderUrl": "https://theepicsnail.github.io/hifi/shaders/TerrainThing.fs",
     "version": 2,
     "channels": [],
     "grabbableKey": {
@@ -14,6 +14,23 @@ Example User Data:
     }
   }
 }
+
+{
+  "ProceduralEntity": {
+    "shaderUrl": "https://theepicsnail.github.io/hifi/shaders/TerrainThing.fs",
+    "version": 2,
+    "channels": [
+      "https://opengameart.org/sites/default/files/brushwalker437.png",
+      "http://4.bp.blogspot.com/-Mz94fzjf9DM/UmpLfICutiI/AAAAAAAAEk8/8Uid3yVbuzc/s1600/Dirt+00+seamless.jpg",
+      "https://cmkt-image-prd.global.ssl.fastly.net/0.1.0/ps/449530/1160/1160/m1/fpnw/wm1/creative-temp-.jpg?1429264912&s=1417459451ad7b76122f70c0092aafa5"
+    ],
+    "grabbableKey": {
+      "grabbable": false
+    }
+  }
+}
+
+
 */
 
 float noise(vec3 p) {
@@ -31,7 +48,7 @@ const float PI = 3.14159265359;
 const float TAU = PI * 2;
 float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float shininess) {
     specular = vec3(0);
-    shininess = 0.5;
+    shininess = 0;
     
     vec3 worldEye = getEyeWorldPos();
 
@@ -59,10 +76,10 @@ float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float s
     
     
     // 0 - water
-    float b1 = mix(.18, .2, snoise(vec3(worldPos.xz*2, iGlobalTime * .1))); // solid water below here
-    float b2 = .25; // solid water to solid dirt transition endpoint
-    float b3 = .25; // solid dirt below here
-    float b4 = .3; //to solid grass transition endpoint
+    float b1 = mix(.35, .4, snoise(vec3(worldPos.xz/2, iGlobalTime * .1))); // solid water below here
+    float b2 = .4; // solid water to solid dirt transition endpoint
+    float b3 = .45; // solid dirt below here
+    float b4 = .5; //to solid grass transition endpoint
 
     if(alt < b1) {
         diffuse = c1;
@@ -79,5 +96,5 @@ float getProceduralColors(inout vec3 diffuse, inout vec3 specular, inout float s
     //diffuse = fract(alt.xxx);
     //fract(vec3(worldPos.xz,0));
     
-    return 1;
+    return 0;
 }
