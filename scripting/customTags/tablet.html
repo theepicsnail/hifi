@@ -1,0 +1,205 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600,700" rel=" stylesheet">
+    <style>
+        /*
+            https://github.com/highfidelity/hifi/blob/43f84a95776c04e9edd7084b2ec7979d008e0c3d/interface/resources/qml/hifi/tablet/TabletHome.qml
+        */
+        html, body {
+            width:480px;
+            height:720px;
+            margin:0px;
+            border:0px;
+            overflow:hidden;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+
+        .tablet {
+            display:flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(#2b2b2b 20%, #1e1e1e 100%);
+            height:90px;
+            text-align: center;
+        }
+
+        .content {
+            width:420px;
+            height:630px;
+            background: linear-gradient(#2b2b2b 20%, #0f212e 100%);
+            flex-direction: column;
+            padding-top: 20;
+            padding-left: 30;
+            padding-right: 30;
+            padding-bottom: 0;
+            overflow: scroll;
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+
+        span {
+            padding: 2px;
+        }
+
+        .tablet-ui {
+            color:rgba(255,255,255,.95);
+            background-color: rgba(0,0,0,.5);
+            margin:10;
+        }
+
+        .hf-ui-border {
+            border-radius: 7px;
+            border: 3px solid gray;
+        }
+
+        .hf-ui-border:hover
+        {
+            border: 3px solid #72d4c4;
+        }
+
+        .wide {
+            width:100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .preview {
+            display: block;
+            max-width:360px;
+            max-height:90px;
+            width: auto;
+            height: auto;
+        }
+    </style>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <script src="http://localhost:35729/livereload.js?snipver=1"></script>
+</head>
+
+<body>
+    <div class="tablet">
+        <div class="header">
+            <H1>Nametag Config</H1>
+        </div>
+        <div class="content">
+            <div class="row hf-ui-border">
+                <div class="row wide">
+                    <div>
+                        <input type="checkbox" id="enabled">
+                        <label for="enabled" class="wide">Nametags enabled</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="seeSelf">
+                        <label for="seeSelf" class="wide">See your own nametag</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="quickToggle">
+                        <label for="quickToggle" class="wide">Menu button toggles nametags</label>
+                        <br><span>View > Nametags > Configure</span>
+                    </div>
+                </div>
+            </div>
+
+            <span>Nametag settings</span>
+            <div class="row hf-ui-border">
+                <span>Images should be 4x1 aspect ratio.</span>
+                <div>
+                    <input type="checkbox" id="allowCustom">
+                    <label for="allowCustom" class="wide">Use their settings if provided</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="provideCustom">
+                    <label for="provideCustom" class="wide">Provide settings if requested</label>
+                </div>
+                <div>
+                    Normal<input id="bg" placeholder="url" value="">
+                </div>
+                <div>
+                    <img src="" id="bgImg" class="hidden preview">
+                </div>
+                <div>
+                    Talking <input id="bgTalking" placeholder="url">
+                </div>
+                <div>
+                    <img src="" id="bgTalkingImg" class="hidden  preview">
+                </div>
+            </div>
+            <textarea class="row wide" style="height:250px; overflow:scroll" id="debug"></textarea>
+        </div>
+    </div>
+    <script>
+
+        function debug(text) {
+            DEBUG = document.getElementById("debug");
+            DEBUG.innerText = text + "\n-------\n" + DEBUG.innerText;
+        }
+
+        debug(new Date());
+        // config keys double as element ids.
+        var config = {
+            "enabled": "checked",
+            "seeSelf": "checked",
+            "quickToggle": "checked",
+            "allowCustom": "checked",
+            "provideCustom": "checked",
+            "bg": "value",
+            "bgTalking": "value"
+        };
+
+        function updateImage(id) {
+            var image = document.getElementById(id + "Img");
+            image.onload = function () { image.classList.remove("hidden"); };
+            image.onerror = function () { image.classList.add("hidden"); }
+            image.src = document.getElementById(id).value;
+        }
+
+        function init() {
+            for (var eid in config) {
+                var e = document.getElementById(eid);
+                e.onchange = saveSettings;
+            }
+            EventBridge.scriptEventReceived.connect((data) => {
+                debug(data);
+                var req = JSON.parse(data);
+                var element = document.getElementById(req.id);
+                element[config[req.id]] = req.value;
+
+                switch (req.id) {
+                    case "bg": case "bgTalking":
+                        updateImage(req.id);
+                }
+            });
+            setTimeout(() => {
+                EventBridge.emitWebEvent(JSON.stringify({ name: "ready" }));
+            }, 100);
+        }
+
+        function saveSettings(evt) {
+            var element = evt.srcElement;
+            debug("save " + element.id);
+            switch (element.id) {
+                case "bg": case "bgTalking":
+                    updateImage(element.id);
+            }
+            EventBridge.emitWebEvent(JSON.stringify({
+                "name": "set",
+                "id": element.id,
+                "value": element[config[element.id]]
+            }));
+        }
+
+        init();
+
+    </script>
+</body>
+
+</html>

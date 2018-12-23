@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es3",
+        "lib": [
+            "es5"
+        ],
+        "outFile": "tags.js",
+        "strict": true,
+        "removeComments": true
+    },
+    "include": [
+        ".",
+        "../../hifi-typescript/*",
+    ],
+    "exclude": []
+}
