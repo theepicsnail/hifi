@@ -1,12 +1,12 @@
 /*
-
 {
   "ProceduralEntity": {
-    "shaderUrl": "http://home.snail.rocks/shaders/discoFloor.fs?1",
+    "shaderUrl": "http://cdn.snail.rocks/shaders/discoFloor.fs",
     "version": 2,
-    "uniforms": {
-    },
-    "channels": []
+    "uniforms": {},
+    "channels": [
+      "http://cdn.snail.rocks/shaders/discoTile.png"
+    ]
   }
 }
 */
