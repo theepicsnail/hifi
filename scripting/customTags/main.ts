@@ -1,5 +1,4 @@
-/// <reference path="../utils/tablet.ts" />
-
+const TABLET = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 /*
 Last release - http://cdn.snail.rocks/scripting/customTags/tags.js
 Active dev - http://home.snail.rocks:8000/scripting/customTags/_tags.js
@@ -154,7 +153,7 @@ class Nametag {
             name = name.substr(0, name.length - 1);
         } while (name.length > 0);
         let leftMargin = (1 - size.width) / 2;
-        let topMargin = (.25 - size.height) / 2;
+        let topMargin = (.4 - size.height) / 2;
 
         const scale = avatar.scale;
         const textEdit = {
@@ -162,13 +161,14 @@ class Nametag {
             leftMargin: leftMargin,
             topMargin: topMargin,
             lineHeight: .15,
+            localRotation: Quat.IDENTITY
         };
 
         let pose = { x: 0, y: 1.25 * scale, z: 0 };
         const show_fg = avatar.audioLoudness == 0;
         Overlays.editOverlays({
-            [Uuid.toString(this.background)]: { localPosition: pose, visible: show_fg },
-            [Uuid.toString(this.bg_talking)]: { localPosition: pose, visible: !show_fg },
+            [Uuid.toString(this.background)]: { localPosition: pose, visible: show_fg, localRotation: Quat.IDENTITY },
+            [Uuid.toString(this.bg_talking)]: { localPosition: pose, visible: !show_fg, localRotation: Quat.IDENTITY },
             [Uuid.toString(this.text)]: textEdit,
             [Uuid.toString(this.text_background)]: textEdit,
         });

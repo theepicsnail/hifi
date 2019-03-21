@@ -73,19 +73,20 @@ var Nametag = (function () {
                 name = name.substr(0, name.length - 1);
             } while (name.length > 0);
             var leftMargin = (1 - size.width) / 2;
-            var topMargin = (.25 - size.height) / 2;
+            var topMargin = (.4 - size.height) / 2;
             var scale = avatar.scale;
             var textEdit = {
                 text: name,
                 leftMargin: leftMargin,
                 topMargin: topMargin,
-                lineHeight: .15
+                lineHeight: .15,
+                localRotation: Quat.IDENTITY
             };
             var pose = { x: 0, y: 1.25 * scale, z: 0 };
             var show_fg = avatar.audioLoudness == 0;
             Overlays.editOverlays((_a = {},
-                _a[Uuid.toString(_this.background)] = { localPosition: pose, visible: show_fg },
-                _a[Uuid.toString(_this.bg_talking)] = { localPosition: pose, visible: !show_fg },
+                _a[Uuid.toString(_this.background)] = { localPosition: pose, visible: show_fg, localRotation: Quat.IDENTITY },
+                _a[Uuid.toString(_this.bg_talking)] = { localPosition: pose, visible: !show_fg, localRotation: Quat.IDENTITY },
                 _a[Uuid.toString(_this.text)] = textEdit,
                 _a[Uuid.toString(_this.text_background)] = textEdit,
                 _a));
